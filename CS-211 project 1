@@ -1,0 +1,98 @@
+#include <iostream>
+using namespace std;
+
+int player;  
+char placement[10];
+
+void resetBoard() {
+    for (int i = 1; i <= 9; i++) {
+        placement[i] = '0' + i;
+    }
+    player = 1;
+}
+// code to setup the board//
+void board() {
+    cout << "     |     |     " << endl;
+    cout << "  " << placement[1] << "  |  " << placement[2] << "  |  " << placement[3] << endl;
+    cout << "_____|_____|_____" << endl;
+    cout << "     |     |     " << endl;
+    cout << "  " << placement[4] << "  |  " << placement[5] << "  |  " << placement[6] << endl;
+    cout << "_____|_____|_____" << endl;
+    cout << "     |     |     " << endl;
+    cout << "  " << placement[7] << "  |  " << placement[8] << "  |  " << placement[9] << endl;
+    cout << "     |     |     " << endl;
+}
+// checks if its winner// 
+bool checkWin() {
+    int wins[8][3] = {
+        {1, 2, 3}, {4, 5, 6}, {7, 8, 9},
+        {1, 4, 7}, {2, 5, 8}, {3, 6, 9},
+        {1, 5, 9}, {3, 5, 7}
+    };
+
+    for (int i = 0; i < 8; i++) {
+        if (placement[wins[i][0]] == placement[wins[i][1]] &&
+            placement[wins[i][1]] == placement[wins[i][2]]) {
+            return true;
+        }
+    }
+    return false;
+}
+// checks wheather its a draw or not //
+bool draw() {
+    for (int i = 1; i <= 9; i++) {
+        if (placement[i] != 'X' && placement[i] != 'O') {
+            return false;
+        }
+    }
+    return true;
+}
+// code for how the game works 
+void playGame() {
+    int choice;
+    char mark;
+
+    while (true) {
+        mark = (player == 1) ? 'X' : 'O';
+
+        cout << "Player " << player << ", enter a number (1-9): ";
+        cin >> choice;
+
+        if (choice < 1 || choice > 9 || placement[choice] == 'X' || placement[choice] == 'O') {
+            cout << "Invalid move! Try again.\n";
+            continue;
+        }
+
+        placement[choice] = mark;
+        board();
+
+        if (checkWin()) {
+            cout << "Player " << player << " wins!\n";
+            break;
+        }
+
+        if (draw()) {
+            cout << "It's a draw!\n";
+            break;
+        }
+
+        player = (player == 1) ? 2 : 1;
+    }
+}
+
+int main() {
+    char PA;// PA stands for play Again 
+    
+    do {
+        resetBoard();
+        board();
+        playGame();
+
+        cout << "Do you want to play again? (Y/N): ";
+        cin >> PA;
+        
+    } while (PA == 'Y' || PA == 'y');
+
+    cout << "Thanks for playing!\n";
+    return 0;
+}
